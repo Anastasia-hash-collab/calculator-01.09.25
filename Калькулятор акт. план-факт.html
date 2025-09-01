@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Калькулятор расчета продолжительности монтажа</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      margin: 40px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      max-width: 900px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    p.instructions {
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .factor {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    .factor label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+      color: #222;
+    }
+    .options label {
+      margin-right: 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .input-group {
+      margin: 15px 0;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .results {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 8px;
+      background: #f1f8ff;
+      border: 1px solid #d6e9ff;
+    }
+    .results h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #333;
+    }
+    .chart-container {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Калькулятор расчета продолжительности монтажных работ<br>ООО "Комбинат инновационных технологий - МонАрх"</h1>
+    <p class="instructions">
+      Данный калькулятор предназначен для автоматического расчета времени монтажа при разном уровне организации строительных объектов.<br>
+      Выберите один из предлагаемых вариантов организационно-технологических решений и нажмите кнопку <b>Рассчитать</b>.
+    </p>
+
+    <div class="factor">
+      <label>Х1 — Способ строповки модуля:</label>
+      <div class="options">
+        <label><input type="radio" name="x1" value="1" checked> Строповка с подмостей</label>
+        <label><input type="radio" name="x1" value="-1"> Строповка с вышки-туры</label>
+      </div>
+    </div>
+
+    <div class="factor">
+      <label>Х2 — Способ наведения и установки модуля:</label>
+      <div class="options">
+        <label><input type="radio" name="x2" value="1" checked> С использованием траверсы</label>
+        <label><input type="radio" name="x2" value="-1"> С использованием строп СТПК</label>
+      </div>
+    </div>
+
+    <div class="factor">
+      <label>Х3 — Квалификация монтажной бригады:</label>
+      <div class="options">
+        <label><input type="radio" name="x3" value="1" checked> Опытные монтажники (&gt;2 лет)</label>
+        <label><input type="radio" name="x3" value="-1"> Неопытные монтажники (&lt;2 лет)</label>
+      </div>
+    </div>
+
+    <div class="factor">
+      <label>Х4 — Способ расстроповки модуля:</label>
+      <div class="options">
+        <label><input type="radio" name="x4" value="1" checked> С подмостей</label>
+        <label><input type="radio" name="x4" value="-1"> С вышки-туры</label>
+      </div>
+    </div>
+
+    <div class="factor">
+      <label>Х5 — Конструкция временных секций кровли:</label>
+      <div class="options">
+        <label><input type="radio" name="x5" value="1" checked> 6-метровые секции</label>
+        <label><input type="radio" name="x5" value="-1"> 3-метровые секции</label>
+      </div>
+    </div>
+
+    <div class="factor">
+      <label>Х6 — Вид монтажных соединений:</label>
+      <div class="options">
+        <label><input type="radio" name="x6" value="1" checked> Параллельно с монтажом</label>
+        <label><input type="radio" name="x6" value="-1"> После монтажа этаж-секции</label>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Количество модулей на этаж-секции:</label>
+      <input type="number" id="modules" value="7" min="1">
+    </div>
+
+    <div class="input-group">
+      <label>Количество этаж-секций на корпусе:</label>
+      <input type="number" id="sections" value="1" min="1">
+    </div>
+
+    <div class="input-group">
+      <label>Фактическое время монтажа, дни:</label>
+      <input type="number" id="factDays" value="" min="0" step="0.1">
+    </div>
+
+    <button onclick="calculate()">Рассчитать</button>
+
+    <div class="results" id="results" style="display:none;">
+      <h2>Результаты:</h2>
+      <p id="outputTime"></p>
+      <p id="outputDays"></p>
+      <div class="chart-container">
+        <canvas id="comparisonChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function calculate() {
+      const x1 = parseInt(document.querySelector('input[name="x1"]:checked').value);
+      const x2 = parseInt(document.querySelector('input[name="x2"]:checked').value);
+      const x3 = parseInt(document.querySelector('input[name="x3"]:checked').value);
+      const x4 = parseInt(document.querySelector('input[name="x4"]:checked').value);
+      const x5 = parseInt(document.querySelector('input[name="x5"]:checked').value);
+      const x6 = parseInt(document.querySelector('input[name="x6"]:checked').value);
+      const modules = parseInt(document.getElementById("modules").value);
+      const sections = parseInt(document.getElementById("sections").value);
+      const factDays = parseFloat(document.getElementById("factDays").value);
+
+      // Базовое уравнение (минуты)
+      let Y = 526.049 - 36.543*x1 - 49.372*x2 - 44.098*x3 - 15.63*x4 - 16.71*x5 - 18.552*x6;
+      Y = (Y/7) * modules * sections;
+
+      const minTime = Y - 30;
+      const maxTime = Y + 30;
+
+      function formatTime(minutes) {
+        const h = Math.floor(minutes / 60);
+        const m = Math.round(minutes % 60);
+        return h + " ч " + m + " мин";
+      }
+
+      const days = Y / 720; // 12 часов = 720 мин
+
+      document.getElementById("results").style.display = "block";
+      document.getElementById("outputTime").innerText = "Общее время монтажа: " + formatTime(minTime) + " – " + formatTime(maxTime);
+      document.getElementById("outputDays").innerText = "Общее время монтажа: " + days.toFixed(2) + " дней";
+
+      if (!isNaN(factDays) && factDays > 0) {
+        const ctx = document.getElementById('comparisonChart').getContext('2d');
+        if (window.chartInstance) {
+          window.chartInstance.destroy();
+        }
+        window.chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Прогноз (дни)', 'Факт (дни)'],
+            datasets: [{
+              label: 'Сравнение',
+              data: [days, factDays],
+              backgroundColor: ['#007bff','#ff4d4d']
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              tooltip: { enabled: true }
+            },
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
